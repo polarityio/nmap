@@ -1,0 +1,49 @@
+<div class='d-flex flex-row justify-content-between align-items-center'>
+  <button {{action 'submitUrl'}} class='p-btn btn btn-light mt-1' disabled={{block._state.isSubmitting}}>
+    Scan
+  </button>
+</div>
+
+<div class='panel panel-default'>
+  <div class='panel-heading'>
+    <i class='fa fa-rocket fa-fw'></i>
+    Scan Target:
+    {{entity.value}}<br />
+    Scan Result:
+    {{message}}
+  </div>
+  <div class='panel-body'>
+    <div class='form-group'>
+      <div class='terminal'>
+        <div class='terminal-header'>
+          <div class='terminal-button terminal-button-red'></div>
+          <div class='terminal-button terminal-button-yellow'></div>
+          <div class='terminal-button terminal-button-green'></div>
+        </div>
+        <div class='terminal-body' id='terminal-body'>
+          <div>
+            <style>
+              pre { overflow-x: auto; white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap;
+              white-space: -o-pre-wrap; word-wrap: break-word; }
+            </style>
+            <pre><span style='color:greenyellow'>{{scanResult}}</span></pre>
+            {{#if block._state.isSubmitting}}
+              <div id='1' style='visibility:hidden;'>S</div>
+              <div id='2' style='visibility:hidden;'>c</div>
+              <div id='3' style='visibility:hidden;'>a</div>
+              <div id='4' style='visibility:hidden;'>n</div>
+              <div id='5' style='visibility:hidden;'>n</div>
+              <div id='6' style='visibility:hidden;'>i</div>
+              <div id='7' style='visibility:hidden;'>n</div>
+              <div id='8' style='visibility:hidden;'>g</div>
+            {{/if}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button {{action 'runOnDemandLookup'}} class='p-btn btn btn-light mt-1' disabled={{block._state.scanNotRun}}>
+  Send Results to AI for Analysis
+</button>
