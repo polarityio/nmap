@@ -54,11 +54,6 @@ polarity.export = PolarityComponent.extend({
       setTimeout(function () {
         document.getElementById('8').style.visibility = 'visible';
       }, 7000);
-    },
-    runOnDemandLookup: function () {
-      this.polarityx.requestOnDemandLookup(
-        this.get('scanResult').replace('http://nmap.org', '').replace(this.get('block.entity.value'), 'TARGET')
-      );
     }
   },
   scan: function () {
