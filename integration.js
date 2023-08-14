@@ -37,6 +37,8 @@ function doLookup(entities, options, cb) {
   cb(null, lookupResults);
 }
 
+const parseErrorToReadableJSON = (error) => JSON.parse(JSON.stringify(error, Object.getOwnPropertyNames(error)));
+
 function onMessage(message, options, cb) {
   if (message.action === 'scan') {
     this.scanTarget = message.entity;
@@ -57,7 +59,7 @@ function onMessage(message, options, cb) {
       if (err) {
         Logger.error(err);
         cb({
-          detail: err
+          detail: parseErrorToReadableJSON(err)
         });
         return;
       }

@@ -31,7 +31,7 @@
             <pre><span class="p-gray">$ nmap -sT -T4 -Pn -top-ports {{details.topPorts}} {{entity.value}}</span></pre>
           </div>
           <div>
-            {{#if errorMessage}}
+            {{#if block._state.errorMessage}}
               <pre><span class="p-red">{{block._state.errorMessage}}</span></pre>
             {{/if}}
             {{#if block._state.scanResult}}

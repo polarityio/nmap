@@ -23,16 +23,16 @@ polarity.export = PolarityComponent.extend({
     },
     copyData: function () {
       Ember.run.scheduleOnce(
-          'afterRender',
-          this,
-          this.copyElementToClipboard,
-          `nmap-container-${this.get('uniqueIdPrefix')}`
+        'afterRender',
+        this,
+        this.copyElementToClipboard,
+        `nmap-container-${this.get('uniqueIdPrefix')}`
       );
 
       Ember.run.scheduleOnce('destroy', this, this.restoreCopyState);
     }
   },
-  copyElementToClipboard (element) {
+  copyElementToClipboard(element) {
     window.getSelection().removeAllRanges();
     let range = document.createRange();
 
@@ -41,7 +41,7 @@ polarity.export = PolarityComponent.extend({
     document.execCommand('copy');
     window.getSelection().removeAllRanges();
   },
-  restoreCopyState () {
+  restoreCopyState() {
     this.set('showCopyMessage', true);
 
     setTimeout(() => {
@@ -72,7 +72,14 @@ polarity.export = PolarityComponent.extend({
   },
   getErrorDetail: (err) => {
     if (err && err.meta && err.meta.detail) {
-      return err.meta.detail;
+      console.error(err.meta.detail);
+      if (typeof err.meta.detail === 'string') {
+        return err.meta.detail;
+      } else if (err.meta.detail.message && typeof err.meta.detail.message === 'string') {
+        return err.meta.detail.message;
+      } else {
+        return JSON.stringify(err.meta.detail.message, null, 2);
+      }
     } else {
       return JSON.stringify(err, null, 2);
     }

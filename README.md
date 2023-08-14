@@ -8,6 +8,18 @@ More specifically, the following scan is run on the specified IP address:
 nmap -sT -T4 -Pn -top-ports 64 <ip address>
 ```
 
+**Important** -- You must have the `nmap` utility installed on your Polarity Server for this integration to work. If you see the following error message then your Polarity Server does not have `nmap` installed:
+
+```
+/bin/sh: nmap: command not found
+```
+
+You can install `nmap` with the following command:
+
+```bash
+sudo yum install nmap
+```
+
 | <img src="./images/overlay.png" width=50%/> |
 |---------------------------------------------|
 | *Nmap Scan Example*                         |
