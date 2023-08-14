@@ -2,5 +2,8 @@
   "name": "nmap",
   "version": "3.0.0",
   "main": "./integration.js",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "ip-address": "^8.1.0"
+  }
 }

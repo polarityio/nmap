@@ -1,6 +1,7 @@
 'use strict';
 
-const { execSync } = require('child_process');
+const { exec } = require('child_process');
+const { AddressError, Address4 } = require('ip-address');
 
 let Logger;
 
@@ -22,10 +23,11 @@ function doLookup(entities, options, cb) {
     if (!options.privateIpOnly || (options.privateIpOnly && entityObj.isIP && entityObj.isPrivateIP)) {
       lookupResults.push({
         entity: entityObj,
+        isVolatile: true,
         data: {
-          summary: [`${options.topPorts} ports being ran against ${entityObj.value}`],
+          summary: ['Ready to scan'],
           details: {
-            target: entityObj.value
+            topPorts: options.topPorts
           }
         }
       });
@@ -38,26 +40,37 @@ function doLookup(entities, options, cb) {
 function onMessage(message, options, cb) {
   if (message.action === 'scan') {
     this.scanTarget = message.entity;
-    if (!this.scanTarget) {
-      cb(null, {
-        reply: `Please select an IP to scan first`
-      });
 
+    // Ensure the scanTarget is a valid IPv4 address
+    try {
+      new Address4(this.scanTarget);
+    } catch (invalidIpError) {
+      Logger.error({ message: invalidIpError.message, parseMessage: invalidIpError.parseMessage }, 'Parse Message');
+      cb({
+        detail: invalidIpError.message
+      });
       return;
     }
 
     const command = `nmap ${defaultValues.scanType} -top-ports ${options.topPorts} ${defaultValues.arguments} ${this.scanTarget}`;
-    const output = execSync(command, { encoding: 'utf-8' });
+    exec(command, { encoding: 'utf-8' }, (err, stdout, stderr) => {
+      if (err) {
+        Logger.error(err);
+        cb({
+          detail: err
+        });
+        return;
+      }
 
-    cb(null, {
-      reply: output
+      cb(null, {
+        reply: stderr ? stderr.trim() : stdout.trim()
+      });
     });
-    return;
   }
 }
 
 module.exports = {
   startup,
-  doLookup: doLookup,
+  doLookup,
   onMessage
 };

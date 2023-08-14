@@ -1,15 +1,13 @@
 polarity.export = PolarityComponent.extend({
   details: Ember.computed.alias('block.data.details'),
   entity: Ember.computed.alias('block.entity'),
-  message: '',
-  polarityx: Ember.inject.service('polarityx'),
-  results: '',
-  submitAsPublic: false,
-  tags: '',
+
   init() {
+    let array = new Uint32Array(5);
+    this.set('uniqueIdPrefix', window.crypto.getRandomValues(array).join(''));
+
     if (!this.get('block._state')) {
       this.set('block._state', {});
-      this.set('block._state.scanNotRun', true);
       this.set('block._state.isSubmitting', false);
       this.set('block._state.conflictingRunning', false);
     }
@@ -17,46 +15,45 @@ polarity.export = PolarityComponent.extend({
   },
   actions: {
     submitUrl: function () {
-      //Actually Trigger Scan
-      this.set('message', 'Scanning');
       this.scan();
 
       this.set('block._state.errorMessage', '');
+      this.set('block._state.scanResult', '');
       this.set('block._state.isSubmitting', true);
-      setTimeout(function () {
-        document.getElementById('1').style.visibility = 'visible';
-      }, 10);
+    },
+    copyData: function () {
+      Ember.run.scheduleOnce(
+          'afterRender',
+          this,
+          this.copyElementToClipboard,
+          `nmap-container-${this.get('uniqueIdPrefix')}`
+      );
 
-      setTimeout(function () {
-        document.getElementById('2').style.visibility = 'visible';
-      }, 1000);
-
-      setTimeout(function () {
-        document.getElementById('3').style.visibility = 'visible';
-      }, 2000);
-
-      setTimeout(function () {
-        document.getElementById('4').style.visibility = 'visible';
-      }, 3000);
-
-      setTimeout(function () {
-        document.getElementById('5').style.visibility = 'visible';
-      }, 4000);
-
-      setTimeout(function () {
-        document.getElementById('6').style.visibility = 'visible';
-      }, 5000);
-
-      setTimeout(function () {
-        document.getElementById('7').style.visibility = 'visible';
-      }, 6000);
-
-      setTimeout(function () {
-        document.getElementById('8').style.visibility = 'visible';
-      }, 7000);
+      Ember.run.scheduleOnce('destroy', this, this.restoreCopyState);
     }
   },
+  copyElementToClipboard (element) {
+    window.getSelection().removeAllRanges();
+    let range = document.createRange();
+
+    range.selectNode(typeof element === 'string' ? document.getElementById(element) : element);
+    window.getSelection().addRange(range);
+    document.execCommand('copy');
+    window.getSelection().removeAllRanges();
+  },
+  restoreCopyState () {
+    this.set('showCopyMessage', true);
+
+    setTimeout(() => {
+      if (!this.isDestroyed) {
+        this.set('showCopyMessage', false);
+      }
+    }, 2000);
+  },
   scan: function () {
+    this.set('block._state.scanResult', '');
+    this.set('block._state.errorMessage', '');
+
     const payload = {
       action: 'scan',
       entity: this.get('block.entity.value')
@@ -64,24 +61,20 @@ polarity.export = PolarityComponent.extend({
 
     this.sendIntegrationMessage(payload)
       .then((response) => {
-        this.set('message', 'Displaying');
-        this.set('scanResult', response.reply);
-        this.set('showSuccessMessage', true);
+        this.set('block._state.scanResult', response.reply);
       })
-      .catch(function (err) {
-        self.set('message', JSON.stringify(err, null, 2));
-        this.set('message', 'Error');
+      .catch((err) => {
+        this.set('block._state.errorMessage', this.getErrorDetail(err));
       })
       .finally(() => {
-        this.set('message', 'Complete');
         this.set('block._state.isSubmitting', false);
-        this.set('block._state.scanNotRun', false);
-
-        setTimeout(() => {
-          if (!this.isDestroyed) {
-            this.set('showSuccessMessage', false);
-          }
-        }, 2000);
       });
+  },
+  getErrorDetail: (err) => {
+    if (err && err.meta && err.meta.detail) {
+      return err.meta.detail;
+    } else {
+      return JSON.stringify(err, null, 2);
+    }
   }
 });

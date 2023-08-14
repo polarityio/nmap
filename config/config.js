@@ -1,12 +1,12 @@
 module.exports = {
   name: 'NMAP',
   acronym: 'NMAP',
-  description: 'Enables you to kick off a scan at the click of a button',
+  description: 'Kick off an Nmap scan at the click of a button',
   logging: {
     level: 'info' //trace, debug, info, warn, error, fatal
   },
   styles: ['./styles/style.less'],
-  entityTypes: ['ipv4'],
+  entityTypes: ['IPv4'],
   block: {
     component: {
       file: './components/block.js'
@@ -23,8 +23,8 @@ module.exports = {
       description: "This setting controls how many ports will be scanned based on NMAP's built in port popularity",
       default: 64,
       type: 'number',
-      userCanEdit: true,
-      adminOnly: false
+      userCanEdit: false,
+      adminOnly: true
     },
     {
       key: 'privateIpOnly',
@@ -32,8 +32,8 @@ module.exports = {
       description: 'If checked, the integration will only be available for private (RFC-1918) IP addresses.',
       default: false,
       type: 'boolean',
-      userCanEdit: true,
-      adminOnly: false
+      userCanEdit: false,
+      adminOnly: true
     }
   ]
 };
