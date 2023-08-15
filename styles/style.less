@@ -1,0 +1,135 @@
+@danger-color: #ff4559;
+
+.p-red {
+  color: @danger-color;
+}
+
+.p-gray {
+  color: #d0d0d0;
+}
+
+.p-blue {
+  color: #32afff;
+}
+
+.p-greenyellow {
+  color: #adff2f;
+}
+
+pre {
+  overflow-x: auto;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+}
+
+.scrollable-block {
+  max-height: 250px;
+  overflow-y: scroll;
+}
+
+.header-block {
+  background-color: #ddd;
+  padding: 5px;
+  font-family: 'Lucida Console', Monaco, monospace;
+}
+
+.terminal {
+  background-color: #2d2d2d;
+  border: 1px solid #444;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  color: #d0d0d0;
+  font-family: monospace;
+  font-size: 12px;
+  height: 200px;
+  margin: 10px 0;
+  position: relative;
+  width: 100%;
+}
+
+.terminal-header {
+  background-color: #444;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  display: flex;
+  justify-content: flex-end;
+  padding: 5px;
+}
+
+.terminal-button {
+  border-radius: 50%;
+  height: 12px;
+  margin-left: 5px;
+  width: 12px;
+}
+
+.terminal-button-red {
+  background-color: #998483;
+}
+
+.terminal-button-yellow {
+  background-color: #ada987;
+}
+
+.terminal-button-green {
+  background-color: #3d5c3e;
+}
+
+.terminal-body {
+  height: calc(100% - 27px);
+  overflow-y: scroll;
+  padding: 5px;
+}
+
+.terminal-command {
+  color: #a6e22e;
+}
+
+.terminal-output {
+  color: #d0d0d0;
+}
+
+.copy-btn-container {
+  flex: 1 1 auto;
+  position: absolute;
+  right: 10px;
+  top: 7px;
+
+  .copy-btn {
+    font-size: 12px;
+    padding: 0px;
+    height: 20px;
+
+    :active {
+      color: darken(#388e3c, 5%);
+    }
+  }
+
+  .copy-success-message {
+    position: absolute;
+    top: 20px;
+    right: 0px;
+    background-color: rgb(222, 226, 230);
+    min-width: max-content;;
+    padding: 5px;
+    border-radius: 3px;
+
+    .copy-success-icon {
+      color: #aaa;
+    }
+
+    &.visible {
+      visibility: visible;
+      opacity: 1;
+      transition: opacity 0.25s linear;
+    }
+
+    &.hidden {
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0s 0.25s, opacity 0.25s linear;
+    }
+  }
+}
