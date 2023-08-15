@@ -15,7 +15,15 @@ module.exports = {
       file: './templates/block.hbs'
     }
   },
+  defaultColor: 'light-gray',
   onDemandOnly: true,
+  request: {
+    cert: '',
+    key: '',
+    passphrase: '',
+    ca: '',
+    proxy: ''
+  },
   options: [
     {
       key: 'topPorts',
