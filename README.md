@@ -26,7 +26,7 @@ sudo yum install nmap
 
 ### Top Ports
 
-This setting controls how many ports will be scanned based on NMAP's built-in port popularity"
+This setting controls how many ports will be scanned based on NMAP's built-in port popularity
 
 ### Private IPs Only
 
