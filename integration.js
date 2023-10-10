@@ -41,11 +41,11 @@ const parseErrorToReadableJSON = (error) => JSON.parse(JSON.stringify(error, Obj
 
 function onMessage(message, options, cb) {
   if (message.action === 'scan') {
-    this.scanTarget = message.entity;
+    let scanTarget = message.entity;
 
     // Ensure the scanTarget is a valid IPv4 address
     try {
-      new Address4(this.scanTarget);
+      new Address4(scanTarget);
     } catch (invalidIpError) {
       Logger.error({ message: invalidIpError.message, parseMessage: invalidIpError.parseMessage }, 'Parse Message');
       cb({
@@ -54,7 +54,7 @@ function onMessage(message, options, cb) {
       return;
     }
 
-    const command = `nmap ${defaultValues.scanType} -top-ports ${options.topPorts} ${defaultValues.arguments} ${this.scanTarget}`;
+    const command = `nmap ${defaultValues.scanType} -top-ports ${options.topPorts} ${defaultValues.arguments} ${scanTarget}`;
     exec(command, { encoding: 'utf-8' }, (err, stdout, stderr) => {
       if (err) {
         Logger.error(err);
